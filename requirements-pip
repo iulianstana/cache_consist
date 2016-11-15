@@ -1,2 +1,4 @@
 # Usage: pip install -r requirements-pip
-Django == 1.6
+Django == 1.6.1
+python-memcached==1.58
+
