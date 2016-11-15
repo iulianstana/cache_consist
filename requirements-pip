@@ -1,0 +1,2 @@
+# Usage: pip install -r requirements-pip
+Django == 1.6
