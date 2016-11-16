@@ -16,7 +16,6 @@ def cache_get_key(*args, **kwargs):
         serialise.append(str(key))
         serialise.append(str(arg))
     key = hashlib.md5("".join(serialise)).hexdigest()
-    print key
     return key
 
 
@@ -42,4 +41,11 @@ def get_testrequest_cache(tr_id):
 
 def get_testrequest(tr_id):
     return models.TestRequest.objects.get(id=tr_id)
+
+
+def get_hash_testrequest_status(tr_id):
+    tr_obj = get_testrequest_cache(tr_id)
+    serialise = ["my_private_cache", str(tr_obj.id), tr_obj.status, tr_obj.description]
+    key = hashlib.md5("".join(serialise)).hexdigest()
+    return key
 
