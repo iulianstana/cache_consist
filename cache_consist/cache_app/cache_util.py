@@ -54,7 +54,7 @@ def get_testrequest(tr_id):
     return models.TestRequest.objects.get(id=tr_id)
 
 
-@cache_for(60)
+@cache_for(20)
 def get_testrequest_cache(tr_id):
     return models.TestRequest.objects.get(id=tr_id)
 
@@ -78,7 +78,7 @@ def get_result(tr_id):
     return result
 
 
-@cache_result(180)
+@cache_result(40)
 def get_result_cache(tr_id):
     time.sleep(5)
     result = {}
