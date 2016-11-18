@@ -34,12 +34,14 @@ def cache_for(time):
 
 
 #decorator for caching functions
-def cache_result(time):
+def cache_result(time, error_code="nothing here"):
     def decorator(fn):
         def wrapper(*args, **kwargs):
 
             testrequest_hash = get_hash_testrequest_status(args[0])
             key = cache_get_key(fn.__name__, *args, **kwargs)
+            if not testrequest_hash:
+                return error_code
 
             result = cache.get(testrequest_hash + key)
             if not result:
@@ -56,14 +58,20 @@ def get_testrequest(tr_id):
 
 @cache_for(20)
 def get_testrequest_cache(tr_id):
-    return models.TestRequest.objects.get(id=tr_id)
+    try:
+        return models.TestRequest.objects.get(id=tr_id)
+    except:
+        return None
 
 
 def get_hash_testrequest_status(tr_id):
     tr_obj = get_testrequest_cache(tr_id)
-    serialise = ["my_private_cache", str(tr_obj.id), tr_obj.status, tr_obj.description]
-    key = hashlib.md5("".join(serialise)).hexdigest()
-    return key
+    if tr_obj:
+        serialise = ["my_private_cache", str(tr_obj.id), tr_obj.status, tr_obj.description]
+        key = hashlib.md5("".join(serialise)).hexdigest()
+        return key
+    else:
+        return None
 
 
 def get_result(tr_id):
