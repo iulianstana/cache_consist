@@ -28,7 +28,7 @@ class TestCache(unittest.TestCase):
         # clean current cache
         cache.clear()
 
-        # cache for 40 seconds
+        # cache for RESULT_TIME seconds
         s = time.time()
         cache_util.get_result_cache(1)
         e = time.time()
@@ -62,7 +62,7 @@ class TestCache(unittest.TestCase):
         # clean current cache
         cache.clear()
 
-        # cache for 40 seconds with current tr_data
+        # cache for RESULT_TIME seconds with current tr_data
         s = time.time()
         cache_util.get_result_cache(1)
         e = time.time()
@@ -76,7 +76,7 @@ class TestCache(unittest.TestCase):
         tr_obj.status = 'DONE'
         tr_obj.save()
 
-        # new data cache for other 20 seconds
+        # new data cache for other TESTREQUEST_TIME seconds
         s = time.time()
         cache_util.get_result_cache(1)
         e = time.time()
@@ -88,4 +88,15 @@ class TestCache(unittest.TestCase):
         cache_util.get_result_cache(1)
         e = time.time()
         self.assertTrue(e - s < 1)
+
+    def test_testrequest_unknown(self):
+        """
+        use unknown testrequest id - test to see if it returns None
+        """
+        # clean current cache
+        cache.clear()
+
+        unknown_result = cache_util.get_result_cache(100)
+
+        self.assertEqual(unknown_result, 'nothing here')
 
