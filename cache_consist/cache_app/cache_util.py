@@ -6,6 +6,10 @@ from django.core.cache import cache
 from cache_app import models
 
 
+SLEEP_TIME = 5
+TESTREQUEST_TIME = 20
+RESULT_TIME = 40
+
 
 #get the cache key for storage
 def cache_get_key(*args, **kwargs):
@@ -56,7 +60,7 @@ def get_testrequest(tr_id):
     return models.TestRequest.objects.get(id=tr_id)
 
 
-@cache_for(20)
+@cache_for(TESTREQUEST_TIME)
 def get_testrequest_cache(tr_id):
     try:
         return models.TestRequest.objects.get(id=tr_id)
@@ -75,7 +79,7 @@ def get_hash_testrequest_status(tr_id):
 
 
 def get_result(tr_id):
-    time.sleep(5)
+    time.sleep(SLEEP_TIME)
     result = {}
     tr = get_testrequest(tr_id)
     result = {'tr_id': tr.id,
@@ -86,9 +90,9 @@ def get_result(tr_id):
     return result
 
 
-@cache_result(40)
+@cache_result(RESULT_TIME)
 def get_result_cache(tr_id):
-    time.sleep(5)
+    time.sleep(SLEEP_TIME)
     result = {}
     tr = get_testrequest_cache(tr_id)
     result = {'tr_id': tr.id,
